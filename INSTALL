@@ -1,0 +1,279 @@
+Content:
+1) How to build the Source Package from source
+2) How to build the Debian Package
+3) Notes: Content of source files
+4) Notes: Prepare mysql/MariaDB (Terminal)
+
+
+1) How to build the Source Package from source
+
+1.0.0) Main folder name: gnulocsys-1.9.5 (example)
+
+1.0.1) Start files:
+
+images/gnulocsys.png
+
+main.cpp
+mainwindow.ui
+mainwindow.cpp
+gnulocsys.pro
+mainwindow.h
+ui_mainwindow.h
+
+gnulocsys.desktop
+
+COPYING
+ChangeLog
+README	       
+[INSTALL]     
+
+
+1.0.2) Add in .pro file:
+
+unix {
+
+	OBJECTS_DIR = .obj
+	MOC_DIR     = .moc
+	UI_DIR      = .ui
+
+        isEmpty(PREFIX) {
+                PREFIX = /usr
+        }
+
+	isEmpty(BINDIR) {
+		BINDIR = $${PREFIX}/bin
+	}
+
+	isEmpty(DATADIR) {
+		DATADIR = $${PREFIX}/share
+	}
+
+	INSTALLS += target desktop icon
+
+	target.path = $${BINDIR}
+	target.files = $$TARGET
+
+	desktop.path = $${DATADIR}/applications
+	desktop.files += $${TARGET}.desktop
+
+	icon.path = $${DATADIR}/icons/hicolor/32x32/apps
+	icon.files += images/$${TARGET}.png 
+
+
+
+        #binaries.path  = $$PREFIX/bin
+        #binaries.files = $$TARGET
+
+        #INSTALLS += binaries
+}
+
+1.0.3) Desktop file (gnulocsys.desktop) & icon folder (images)
+
+[Desktop Entry]
+Name=gnulocsys
+Version=1.9.5
+GenericName=gnulocsys
+Comment=gnulocsys
+Exec=/usr/bin/gnulocsys %F
+Icon=/usr/share/icons/hicolor/32x32/apps/gnulocsys.png
+Categories=database;Qt;
+Keywords=gnulocsys;database;glossary;cat;translation;linguistic;Qt;
+Terminal=false
+Type=Application
+
+
+1.1) Create makefile for Qt source (execute commands and create files inside of gnulocsys-1.9.5 folder)
+qmake
+
+1.1.1) Edit makefile
+-remove absolute paths:
+old: /home/username/gnulocsys
+new: gnulocsys
+
+-add $(DESTDIR) and remove local in install path:
+old: @test -d $(INSTALL_ROOT)/usr/local/bin 
+new: @test -d $(INSTALL_ROOT)$(DESTDIR)/usr/bin 
+
+1.2) Create configure file
+
+1.2.1) Create configure.ac file:
+
+AC_INIT([gnulocsys], 1.9.5)
+AM_INIT_AUTOMAKE
+AC_PROG_CC
+AC_CONFIG_FILES(Makefile)
+AC_OUTPUT
+
+1.2.2) Rename Makefile into Makefile.am
+
+1.2.3) aclocal
+
+1.2.4) automake --add-missing --foreign
+
+1.2.5) autoconf
+
+1.2.6) Rename Makefile.am into Makefile
+
+1.3) Configure, make, make install
+
+1.3.1
+./configure
+
+1.3.2
+make
+
+1.3.3 (optional)
+sudo make install
+
+----------------------------------------------------
+
+2) How to build the Debian Package
+
+2.0.0) Start files:
+
+main.cpp
+mainwindow.ui
+mainwindow.cpp
+gnulocsys.pro
+mainwindow.h
+ui_mainwindow.h
+
+gnulocsys.desktop
+
+ChangeLog       	   
+COPYING
+INSTALL
+README	   
+
+images/gnulocsys.png
+
+debian/changelog
+debian/control
+debian/rules
+debian/copyright
+
+debian/dirs
+debian/gnulocsys.install
+debian/compat
+debian/files
+debian/source/[empty]
+debian/watch
+
+
+2.0.1) Create makefile (execute command inside of gnulocsys-1.9.5 folder)
+qmake
+
+2.0.2) Edit makefile
+-remove absolute paths:
+old: /home/username/gnulocsys
+new: gnulocsys
+
+-add $(DESTDIR) and remove local in install path:
+old: @test -d $(INSTALL_ROOT)/usr/local/bin 
+new: @test -d $(INSTALL_ROOT)$(DESTDIR)/usr/bin 
+
+2.1) Compress tar.gz (execute command on the same level as gnulocsys-1.9.5 folder)
+tar -zcvf gnulocsys-1.9.5.orig.tar.gz gnulocsys-1.9.5
+
+2.2) Build package (including .dsc file)
+
+2.2.1) Full package (execute command inside of gnulocsys-1.9.5 folder)
+dpkg-buildpackage -us -uc
+
+2.2.2) Binary, without Debian Source:
+dpkg-buildpackage -b -rfakeroot -us -uc
+
+2.2.3) Debian Source and .dsc file:
+dpkg-buildpackage -S -rfakeroot -us -uc
+
+2.3) Possible error
+dpkg-source: error: can't build with source format '3.0 (quilt)': no upstream tarball found at ../gnulocsys_1.9.5.orig.tar.{bz2,gz,lzma,xz}
+(diff missing)
+Workaround:
+rm pkg/debian/source/format
+
+2.4) Install .deb file e.g. with GDebi
+
+3) Notes: Content of source files
+
+3.1) Edit the control file:
+
+Source: gnulocsys
+Section: unknown
+Priority: optional
+Maintainer: A.D. Klumpp
+Build-Depends: debhelper (>= 9), qtbase5-dev, qtbase5-dev-tools, qt5-qmake
+Standards-Version: 3.9.8
+
+
+Package: gnulocsys
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Database management system for linguists.
+
+3.3) Content of dirs, rules, gnulocsys.install, watch, source-folder
+
+-dirs
+content:
+usr/bin
+usr/share/applications
+
+-rules
+content:
+#!/usr/bin/make -f
+export QT_SELECT := qt5
+
+%:
+	dh $@
+
+-gnulocsys.install
+content:
+gnulocsys usr/bin
+gnulocsys.desktop usr/share/applications
+images/gnulocsys.png usr/share/icons/hicolor/32x32/apps
+
+-watch
+content:
+version=4
+
+-source (empty folder)
+
+--------------------------------------------------------------
+
+4) Notes: Prepare mysql/MariaDB (Termninal)
+
+4.0.1) [Install mysql/MariaDB and QMYSQL]
+
+4.1) Login/Create user
+
+host: 127.0.0.1 or localhost (example)
+port: 3306
+user: username
+
+sudo mysql -u root -p
+
+CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON *.* TO 'username'@'localhost'
+    ->     WITH GRANT OPTION;
+
+mysql -u username -p
+[mysql -h 127.0.0.1 -u username -p]
+
+4.2 CREATE DATABASE
+
+CREATE DATABASE DATABASENAME;
+SHOW DATABASES;
+USE DATABASENAME;
+SHOW TABLES;
+
+4.3 CREATE TABLE
+
+CREATE TABLE Strings1 (ID VARCHAR(45), ES LONGTEXT, TS LONGTEXT);
+CREATE TABLE Glossary1 (ID VARCHAR(45), EG TEXT, TG LONGTEXT);
+ALTER TABLE Strings1 CHANGE ET TS longtext;
+ALTER TABLE Strings1 CHANGE ID SID VARCHAR(45);
+DESCRIBE Strings1;
+[see also: AUTO_INCREMENT]
+
+
+
