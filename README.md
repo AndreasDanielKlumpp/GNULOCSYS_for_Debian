@@ -83,4 +83,4 @@ Please refer to the following links in order to get the source code of GNULOCSYS
 
 Qt: http://wiki.qt.io/Get_The_Source  
 
-GNULOCSYS: https://gitlab.com/AndreasKlumpp
+
