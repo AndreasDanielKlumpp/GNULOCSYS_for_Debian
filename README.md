@@ -79,7 +79,7 @@ GRANT ALL PRIVILEGES ON *.* TO '<type MySQL username here>'@'%' IDENTIFIED BY '<
 This distribution of GNULOCSYS is using C++ and Qt5.
 Qt is released under the terms of the GNU General Public License (GPLV2/GPLV3). Since the source code of GNULOCSYS is open, also the link between GNULOCSYS and Qt is open. This distribution of the link between GNULOCSYS and Qt is only one possible distribution of this combination.
 
-Please refer to the following links in order to get the source code of GNULOCSYS or Qt:
+Please refer to the following links in order to get the source code of Qt:
 
 Qt: http://wiki.qt.io/Get_The_Source  
 
