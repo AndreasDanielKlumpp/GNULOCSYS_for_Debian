@@ -1,5 +1,5 @@
 # GNULOCSYS_for_Debian
-GNULOCSYS for Debian and other Linux distributions
+GNULOCSYS for Debian
 
 GNULOCSYS
 ---------
