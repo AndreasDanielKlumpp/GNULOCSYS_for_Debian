@@ -177,7 +177,7 @@ tar -zcvf gnulocsys-1.9.5.orig.tar.gz gnulocsys-1.9.5
 
 2.2) Build package (including .dsc file)
 
-2.2.1) Full package (execute command inside of gnulocsys-1.9.5 folder)
+2.2.1) Complete package (execute command inside of gnulocsys-1.9.5 folder)
 dpkg-buildpackage -us -uc
 
 2.2.2) Binary, without Debian Source:
