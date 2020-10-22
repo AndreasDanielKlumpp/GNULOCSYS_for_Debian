@@ -4,6 +4,34 @@ Content:
 3) Notes: Content of source files
 4) Notes: Prepare mysql/MariaDB (Terminal)
 
+0) REQUIRED
+
+Linux (tested with Debian 9 and 10)
+
+Qt5 (tested with Qt 5.2.1)
+
+qt5-default
+
+build-essential
+
+(gtk2: qt5-style-plugins: echo "export QT_QPA_PLATFORMTHEME=gtk2" >> ~/.profile)
+
+qmake
+
+GNU Autotools (automake, autoconf, configure, make)
+
+(mesa-common-dev)
+
+(libgl1-mesa-dev, libglu1-mesa-dev)
+
+libmysqlclient
+
+default-libmysqlclient-dev
+
+libmariadbclient-dev
+
+libqt5sql5-mysql
+
 
 1) How to build the Source Package from source
 
